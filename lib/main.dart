@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:star_wars_filmes_personagens/util/route_generator.dart';
+import 'package:star_wars_filmes_personagens/view/widget/home.dart';
 
 void main() {
   runApp(
       MaterialApp(
-        title: 'Personagens Star Wars',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: StarWarsFilmesPersonagens(),
+          debugShowCheckedModeBanner: false,
+          title: 'Personagens Star Wars',
+          initialRoute: RouteGenerator.home,
+          onGenerateRoute: RouteGenerator.generateRoute,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: Home()
       )
   );
-}
-
-class StarWarsFilmesPersonagens extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
