@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star_wars_filmes_personagens/view/widget/avatar_editing.dart';
 import 'package:star_wars_filmes_personagens/view/widget/home.dart';
 import 'package:star_wars_filmes_personagens/view/widget/official_site.dart';
 
@@ -7,6 +8,8 @@ class RouteGenerator {
   static const home = '/';
 
   static const officialSite = '/officialSite';
+
+  static const avatarEditing = '/avatarEditing';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -23,6 +26,15 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (BuildContext context) {
               return OfficialSite();
+            }
+        );
+
+        break;
+
+      case avatarEditing:
+        return MaterialPageRoute(
+            builder: (BuildContext context) {
+              return AvatarEditing();
             }
         );
 

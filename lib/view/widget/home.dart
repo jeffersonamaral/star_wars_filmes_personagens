@@ -9,53 +9,74 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('Lista de Filmes'),
-          bottom: PreferredSize(
-              preferredSize: Size(double.infinity, kToolbarHeight),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(RouteGenerator.officialSite);
-                        },
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(
-                                        width: .5
-                                    )
-                                )
-                            )
-                        ),
-                        child: Text('Site Oficial',
-                          style: TextStyle(
-                            fontSize: 18
+    return DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+              title: Text('Lista de Filmes'),
+              bottom: PreferredSize(
+                  preferredSize: Size(double.infinity, kToolbarHeight * 2),
+                  child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child:
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pushNamed(RouteGenerator.officialSite);
+                                  },
+                                  style: ButtonStyle(
+                                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(18.0),
+                                              side: BorderSide(
+                                                  width: .5
+                                              )
+                                          )
+                                      )
+                                  ),
+                                  child: Text('Site Oficial',
+                                    style: TextStyle(
+                                        fontSize: 18
+                                    ),
+                                  )
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pushNamed(RouteGenerator.avatarEditing);
+                                },
+                                child: CircleAvatar(
+                                  radius: 25,
+                                  child: Image.asset('assets/images/no_avatar.png',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        )
-                    ),
-                    InkWell(
-                      onTap: () {
-                        // FIXME Implementar
-                      },
-                      child: CircleAvatar(
-                        radius: 25,
-                        child: Image.asset('assets/images/no_avatar.png',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                          TabBar(
+                            tabs: [
+                              Tab(text: 'Filmes',),
+                              Tab(text: 'Personagens',),
+                              Tab(text: 'Favoritos',),
+                            ],
+                          )
+                        ],
+                      )
+                  )
               )
-          )
-      ),
-      body: Center(),
+          ),
+          body: TabBarView(
+            children: [
+              Text('Filmes'),
+              Text('Personagens'),
+              Text('Favoritos'),
+            ],
+          ),
+        )
     );
   }
 }
