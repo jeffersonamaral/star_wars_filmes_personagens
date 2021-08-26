@@ -21,7 +21,7 @@ class _AvatarEditingState extends State<AvatarEditing> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                          onPressed: null,
+                          onPressed: () => Navigator.of(context).pop(),
                           style: ButtonStyle(
                               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -38,9 +38,12 @@ class _AvatarEditingState extends State<AvatarEditing> {
                             ),
                           )
                       ),
-                      FluttermojiCircleAvatar(
-                        backgroundColor: Colors.grey[200],
-                        radius: 25,
+                      InkWell(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: FluttermojiCircleAvatar(
+                          backgroundColor: Colors.grey[200],
+                          radius: 25,
+                        ),
                       )
                     ],
                   ),

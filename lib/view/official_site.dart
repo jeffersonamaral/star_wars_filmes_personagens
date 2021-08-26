@@ -38,7 +38,7 @@ class _OfficialSiteState extends State<OfficialSite> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                        onPressed: null,
+                        onPressed: () => Navigator.of(context).pop(),
                         style: ButtonStyle(
                             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -58,9 +58,12 @@ class _OfficialSiteState extends State<OfficialSite> {
                     _loading ? CircularProgressIndicator(
                       color: Colors.grey,
                     ) : Center(),
-                    FluttermojiCircleAvatar(
-                      backgroundColor: Colors.grey[200],
-                      radius: 25,
+                    InkWell(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: FluttermojiCircleAvatar(
+                        backgroundColor: Colors.grey[200],
+                        radius: 25,
+                      ),
                     )
                   ],
                 ),
