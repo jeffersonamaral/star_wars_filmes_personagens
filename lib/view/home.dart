@@ -1,12 +1,11 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
-import 'package:star_wars_filmes_personagens/model/film.dart';
-import 'package:star_wars_filmes_personagens/model/people.dart';
-import 'package:star_wars_filmes_personagens/util/constants.dart';
+import 'package:star_wars_filmes_personagens/controller/film_controller.dart';
+import 'package:star_wars_filmes_personagens/controller/people_controller.dart';
+import 'package:star_wars_filmes_personagens/model/film_model.dart';
+import 'package:star_wars_filmes_personagens/model/people_model.dart';
 import 'package:star_wars_filmes_personagens/util/route_generator.dart';
 import 'package:star_wars_filmes_personagens/view/widget/favoratable_list_view.dart';
 
@@ -25,40 +24,34 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   bool _loadingPeople = false;
 
-  List<Film> _films = [];
+  List<FilmModel> _films = [];
 
-  List<People> _people = [];
+  List<PeopleModel> _people = [];
 
-  void _loadMovies() async {
+  FilmController _filmController = FilmController();
+
+  PeopleController _peopleController = PeopleController();
+
+  void _loadFilms() async {
     setState(() {
       _loadingFilms = true;
     });
 
     _films.clear();
 
-    var response = await http.get(Uri.parse(apiFilmsUrl));
-
-    if (response.statusCode == 200) {
-      List<Film> tempFilms = [];
-
-      var jsonResponse = json.decode(response.body);
-
-      for (Map<String, dynamic> mapMovie in jsonResponse['results']) {
-        tempFilms.add(Film.fromMap(mapMovie));
-      }
-
+    _filmController.loadFilms().then((value) {
       setState(() {
-        _films = tempFilms;
+        _films = value;
         _loadingFilms = false;
       });
-    } else {
-      _showRequestErrorMessage(response);
+    }).catchError((error) {
+      _showRequestErrorMessage(error);
 
       setState(() {
         _films = [];
         _loadingFilms = false;
       });
-    }
+    });
   }
 
   void _loadPeople() async {
@@ -68,29 +61,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
     _people.clear();
 
-    var response = await http.get(Uri.parse(apiPeopleUrl));
-
-    if (response.statusCode == 200) {
-      List<People> tempPeople = [];
-
-      var jsonResponse = json.decode(response.body);
-
-      for (Map<String, dynamic> mapPeople in jsonResponse['results']) {
-        tempPeople.add(People.fromMap(mapPeople));
-      }
-
+    _peopleController.loadFilms().then((value) {
       setState(() {
-        _people = tempPeople;
+        _people = value;
         _loadingPeople = false;
       });
-    } else {
-      _showRequestErrorMessage(response);
+    }).catchError((error) {
+      _showRequestErrorMessage(error);
 
       setState(() {
         _people = [];
         _loadingPeople = false;
       });
-    }
+    });
   }
 
   void _showRequestErrorMessage(var response) {
@@ -124,7 +107,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       });
     });
 
-    _loadMovies();
+    _loadFilms();
     _loadPeople();
   }
 
@@ -178,13 +161,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               )
                           ),
                           InkWell(
-                            onTap: () {
-                              Navigator.of(context).pushNamed(RouteGenerator.avatarEditing);
-                            },
-                            child: FluttermojiCircleAvatar(
-                              backgroundColor: Colors.grey[200],
-                              radius: 25,
-                            )
+                              onTap: () {
+                                Navigator.of(context).pushNamed(RouteGenerator.avatarEditing);
+                              },
+                              child: FluttermojiCircleAvatar(
+                                backgroundColor: Colors.grey[200],
+                                radius: 25,
+                              )
                           )
                         ],
                       ),
@@ -206,10 +189,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         children: [
           _loadingFilms == true ? Center(
             child: CircularProgressIndicator(),
-          ) : FavoratableListView(_films),
+          ) : FavoratableListView(_films, onFavorite: () {}),
           _loadingPeople == true ? Center(
             child: CircularProgressIndicator(),
-          ) : FavoratableListView(_people),
+          ) : FavoratableListView(_people, onFavorite: () {}),
           FavoratableListView([]),
         ],
       ),

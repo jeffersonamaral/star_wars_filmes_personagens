@@ -1,4 +1,4 @@
-abstract class AbstractEntity {
+abstract class AbstractModel {
 
   bool _favorite = false;
 

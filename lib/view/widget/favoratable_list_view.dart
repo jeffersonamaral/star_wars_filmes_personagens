@@ -1,13 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:star_wars_filmes_personagens/model/abstract_entity.dart';
+import 'package:star_wars_filmes_personagens/model/abstract_model.dart';
 
 class FavoratableListView extends StatelessWidget {
 
-  List<AbstractEntity> _data;
+  List<AbstractModel> _data;
 
-  FavoratableListView(this._data);
+  GestureTapCallback? _onFavorite;
+
+  FavoratableListView(this._data, { GestureTapCallback? onFavorite }) {
+    this._onFavorite = onFavorite;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +32,7 @@ class FavoratableListView extends StatelessWidget {
               ),
             ),
             trailing: InkWell(
-              onTap: () {
-                // FIXME IMPLEMENTAR
-              },
+              onTap: _onFavorite,
               child: Icon(Random().nextBool() == true ? Icons.favorite : Icons.favorite_border),
             ),
           );

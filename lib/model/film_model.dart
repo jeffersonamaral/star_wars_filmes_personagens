@@ -1,12 +1,12 @@
-import 'package:star_wars_filmes_personagens/model/abstract_entity.dart';
+import 'abstract_model.dart';
 
-class Film extends AbstractEntity {
+class FilmModel extends AbstractModel {
 
   late int _episode_id;
 
   late String _title;
 
-  Film.fromMap(Map<String, dynamic> map) {
+  FilmModel.fromMap(Map<String, dynamic> map) {
     _episode_id = map['episode_id'];
     _title = map['title'];
   }
