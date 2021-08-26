@@ -30,6 +30,8 @@ dependencies:
   fluttermoji: ^0.2.1
   webview_flutter: ^2.0.12
   sqflite: ^2.0.0+4
+  http: ^0.13.1
+  fluttertoast: ^8.0.3
 
 dev_dependencies:
   flutter_test:

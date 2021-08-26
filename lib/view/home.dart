@@ -1,5 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:star_wars_filmes_personagens/model/film.dart';
+import 'package:star_wars_filmes_personagens/model/people.dart';
+import 'package:star_wars_filmes_personagens/util/constants.dart';
 import 'package:star_wars_filmes_personagens/util/route_generator.dart';
+import 'package:star_wars_filmes_personagens/view/widget/favoratable_list_view.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,6 +19,86 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   String _title = 'Lista de Filmes';
+
+  bool _loadingFilms = false;
+
+  bool _loadingPeople = false;
+
+  List<Film> _films = [];
+
+  List<People> _people = [];
+
+  void _loadMovies() async {
+    setState(() {
+      _loadingFilms = true;
+    });
+
+    _films.clear();
+
+    var response = await http.get(Uri.parse(apiFilmsUrl));
+
+    if (response.statusCode == 200) {
+      List<Film> tempFilms = [];
+
+      var jsonResponse = json.decode(response.body);
+
+      for (Map<String, dynamic> mapMovie in jsonResponse['results']) {
+        tempFilms.add(Film.fromMap(mapMovie));
+      }
+
+      setState(() {
+        _films = tempFilms;
+        _loadingFilms = false;
+      });
+    } else {
+      _showRequestErrorMessage(response);
+
+      setState(() {
+        _films = [];
+        _loadingFilms = false;
+      });
+    }
+  }
+
+  void _loadPeople() async {
+    setState(() {
+      _loadingPeople = true;
+    });
+
+    _people.clear();
+
+    var response = await http.get(Uri.parse(apiPeopleUrl));
+
+    if (response.statusCode == 200) {
+      List<People> tempPeople = [];
+
+      var jsonResponse = json.decode(response.body);
+
+      for (Map<String, dynamic> mapPeople in jsonResponse['results']) {
+        tempPeople.add(People.fromMap(mapPeople));
+      }
+
+      setState(() {
+        _people = tempPeople;
+        _loadingPeople = false;
+      });
+    } else {
+      _showRequestErrorMessage(response);
+
+      setState(() {
+        _people = [];
+        _loadingPeople = false;
+      });
+    }
+  }
+
+  void _showRequestErrorMessage(var response) {
+    Fluttertoast.showToast(
+        msg: 'Falha na requisição: ${response.statusCode}',
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER
+    );
+  }
 
   @override
   void initState() {
@@ -34,6 +122,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         }
       });
     });
+
+    _loadMovies();
+    _loadPeople();
   }
 
   @override
@@ -107,9 +198,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          Text('Filmes'),
-          Text('Personagens'),
-          Text('Favoritos'),
+          _loadingFilms == true ? Center(
+            child: CircularProgressIndicator(),
+          ) : FavoratableListView(_films),
+          _loadingPeople == true ? Center(
+            child: CircularProgressIndicator(),
+          ) : FavoratableListView(_people),
+          FavoratableListView([]),
         ],
       ),
     );

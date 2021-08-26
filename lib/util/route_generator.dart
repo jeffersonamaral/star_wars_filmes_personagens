@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:star_wars_filmes_personagens/view/widget/avatar_editing.dart';
-import 'package:star_wars_filmes_personagens/view/widget/home.dart';
-import 'package:star_wars_filmes_personagens/view/widget/official_site.dart';
+import 'package:star_wars_filmes_personagens/view/avatar_editing.dart';
+import 'package:star_wars_filmes_personagens/view/home.dart';
+import 'package:star_wars_filmes_personagens/view/official_site.dart';
 
 class RouteGenerator {
 
