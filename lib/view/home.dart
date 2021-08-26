@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:star_wars_filmes_personagens/model/film.dart';
@@ -136,6 +137,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    TargetPlatform platform = Theme.of(context).platform;
+
+    var isWeb = platform != TargetPlatform.android &&
+        platform != TargetPlatform.iOS &&
+        platform != TargetPlatform.macOS &&
+        platform != TargetPlatform.windows &&
+        platform != TargetPlatform.fuchsia;
+
     return Scaffold(
       appBar: AppBar(
           title: Text(_title),
@@ -143,8 +152,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               preferredSize: Size(double.infinity, kToolbarHeight * 2),
               child: Padding(
                   padding: EdgeInsets.all(10),
-                  child:
-                  Column(
+                  child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,12 +181,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                             onTap: () {
                               Navigator.of(context).pushNamed(RouteGenerator.avatarEditing);
                             },
-                            child: CircleAvatar(
+                            child: FluttermojiCircleAvatar(
+                              backgroundColor: Colors.grey[200],
                               radius: 25,
-                              child: Image.asset('assets/images/no_avatar.png',
-                                fit: BoxFit.fill,
-                              ),
-                            ),
+                            )
                           )
                         ],
                       ),

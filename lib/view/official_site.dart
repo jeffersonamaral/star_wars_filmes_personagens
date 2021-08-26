@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class OfficialSite extends StatefulWidget {
@@ -57,16 +58,9 @@ class _OfficialSiteState extends State<OfficialSite> {
                     _loading ? CircularProgressIndicator(
                       color: Colors.grey,
                     ) : Center(),
-                    InkWell(
-                      onTap: () {
-                        // FIXME Implementar
-                      },
-                      child: CircleAvatar(
-                        radius: 25,
-                        child: Image.asset('assets/images/no_avatar.png',
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+                    FluttermojiCircleAvatar(
+                      backgroundColor: Colors.grey[200],
+                      radius: 25,
                     )
                   ],
                 ),
