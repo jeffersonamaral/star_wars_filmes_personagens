@@ -1,24 +1,34 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:star_wars_filmes_personagens/model/abstract_model.dart';
+import 'package:star_wars_filmes_personagens/model/favorite_model.dart';
+import 'package:star_wars_filmes_personagens/util/types.dart';
 
-class FavoratableListView extends StatelessWidget {
+class FavoratableListView extends StatefulWidget {
 
-  List<AbstractModel>? _data;
+  List<FavoriteModel>? _data;
 
-  GestureTapCallback? _onFavorite;
+  List<FavoriteModel>? _favorites;
 
-  FavoratableListView(this._data, { GestureTapCallback? onFavorite }) {
-    this._onFavorite = onFavorite;
+  late FavoriteCallback _favoriteCallback;
+
+  FavoratableListView(this._data, this._favorites, { required FavoriteCallback onFavorite }) {
+    this._favoriteCallback = onFavorite;
   }
+
+  @override
+  _FavoratableListViewState createState() => _FavoratableListViewState();
+
+}
+
+class _FavoratableListViewState extends State<FavoratableListView> {
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         padding: EdgeInsets.all(10),
         physics: BouncingScrollPhysics(),
-        itemCount: _data?.length,
+        itemCount: widget._data?.length,
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.only(bottom: 10),
@@ -28,15 +38,19 @@ class FavoratableListView extends StatelessWidget {
             child: ListTile(
               title: Center(
                 child: Text(
-                  _data![index].label,
+                  widget._data![index].name,
                   style: TextStyle(
                       fontSize: 15
                   ),
                 ),
               ),
               trailing: InkWell(
-                onTap: _onFavorite,
-                child: Icon(Icons.favorite, color: Colors.red,),
+                onTap: () {
+                  setState(() {
+                    widget._favoriteCallback(widget._data![index]);
+                  });
+                },
+                child: widget._data![index].favorite == true ? Icon(Icons.favorite, color: Colors.red,) : Icon(Icons.favorite_border, color: Colors.black,),
               ),
             ),
           );

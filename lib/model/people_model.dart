@@ -1,17 +1,16 @@
-import 'abstract_model.dart';
+import 'favorite_model.dart';
 
-class PeopleModel extends AbstractModel {
-
-  late String _name;
+class PeopleModel extends FavoriteModel {
 
   PeopleModel.fromMap(Map<String, dynamic> map) {
-    _name = map['name'];
+    this.name = map['name'];
+  }
+
+  PeopleModel.fromDatabaseMap(Map<String, dynamic> map) {
+    this.name = map['name'];
   }
 
   @override
-  String get label => _name;
-
-  @override
-  Type get type => Type.people;
+  int get type => FavoriteModel.typePeople;
 
 }

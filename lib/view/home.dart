@@ -1,13 +1,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:star_wars_filmes_personagens/controller/favorite_controller.dart';
 import 'package:star_wars_filmes_personagens/controller/film_controller.dart';
 import 'package:star_wars_filmes_personagens/controller/people_controller.dart';
+import 'package:star_wars_filmes_personagens/model/favorite_model.dart';
+import 'package:star_wars_filmes_personagens/model/favorite_repository.dart';
 import 'package:star_wars_filmes_personagens/model/film_model.dart';
 import 'package:star_wars_filmes_personagens/model/people_model.dart';
 import 'package:star_wars_filmes_personagens/util/route_generator.dart';
 import 'package:star_wars_filmes_personagens/view/widget/favoratable_list_view.dart';
+import 'package:star_wars_filmes_personagens/view/widget/favoraties_list_view.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -20,10 +23,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   String _title = 'Lista de Filmes';
 
-  bool _loadingFilms = false;
-
-  bool _loadingPeople = false;
-
   List<FilmModel> _films = [];
 
   List<PeopleModel> _people = [];
@@ -31,6 +30,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   FilmController _filmController = FilmController();
 
   PeopleController _peopleController = PeopleController();
+
+  FavoriteController _favoriteController = FavoriteController(FavoriteRepository());
+
+  List<FavoriteModel> _favorites = [];
 
   Future<List<FilmModel>> _loadFilms() async {
     _films.clear();
@@ -42,6 +45,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     _people.clear();
 
     return _peopleController.loadPeople();
+  }
+
+  void _loadFavorites() async {
+    _favorites.clear();
+
+    _favoriteController.findAll().then((value) => null);
   }
 
   @override
@@ -152,7 +161,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         child: Text('Ocorreu um erro: ${snapshot.error}'),
                       );
                     } else {
-                      return FavoratableListView(snapshot.data, onFavorite: () {});
+                      List<FilmModel> films = snapshot.data!;
+
+                      films.forEach((element) {
+                        if (_favorites.contains(element)) {
+                          element.favorite = true;
+                        }
+                      });
+
+                      return FavoratableListView(snapshot.data, _favorites, onFavorite: (model) {
+                        if (model.favorite) {
+                          _favoriteController.delete(model);
+                        } else {
+                          _favoriteController.save(model);
+                        }
+                      });
                     }
                   } else {
                     return Center(
@@ -178,7 +201,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         child: Text('Ocorreu um erro: ${snapshot.error}'),
                       );
                     } else {
-                      return FavoratableListView(snapshot.data, onFavorite: () {});
+                      List<PeopleModel> films = snapshot.data!;
+
+                      films.forEach((element) {
+                        if (_favorites.contains(element)) {
+                          element.favorite = true;
+                        }
+                      });
+
+                      return FavoratableListView(snapshot.data, _favorites, onFavorite: (model) {
+                        if (model.favorite) {
+                          _favoriteController.delete(model);
+                        } else {
+                          _favoriteController.save(model);
+                        }
+                      });
                     }
                   } else {
                     return Center(
@@ -188,9 +225,43 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 }
               }
           ),
-          FavoratableListView([]),
+          FutureBuilder<List<FavoriteModel>>(
+              future: _favoriteController.findAll(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none
+                    || snapshot.connectionState == ConnectionState.active
+                    || snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  if (snapshot.hasData) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Ocorreu um erro: ${snapshot.error}'),
+                      );
+                    } else {
+                      if (snapshot.data!.isEmpty) {
+                        return Center(
+                          child: Text('Nenhum dado foi encontrado.'),
+                        );
+                      } else {
+                        _favorites = snapshot.data!;
+
+                        return FavoratiesListView(snapshot.data);
+                      }
+                    }
+                  } else {
+                    return Center(
+                      child: Text('Nenhum dado foi encontrado.'),
+                    );
+                  }
+                }
+              }
+          ),
         ],
       ),
     );
   }
+
 }

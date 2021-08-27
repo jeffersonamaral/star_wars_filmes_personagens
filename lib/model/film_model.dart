@@ -1,20 +1,16 @@
-import 'abstract_model.dart';
+import 'favorite_model.dart';
 
-class FilmModel extends AbstractModel {
-
-  late int _episode_id;
-
-  late String _title;
+class FilmModel extends FavoriteModel {
 
   FilmModel.fromMap(Map<String, dynamic> map) {
-    _episode_id = map['episode_id'];
-    _title = map['title'];
+    this.name = map['title'];
+  }
+
+  FilmModel.fromDatabaseMap(Map<String, dynamic> map) {
+    this.name = map['name'];
   }
 
   @override
-  String get label => _title;
-
-  @override
-  Type get type => Type.people;
+  int get type => FavoriteModel.typeFilm;
 
 }
