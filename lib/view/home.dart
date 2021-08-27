@@ -32,56 +32,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   PeopleController _peopleController = PeopleController();
 
-  void _loadFilms() async {
-    setState(() {
-      _loadingFilms = true;
-    });
-
+  Future<List<FilmModel>> _loadFilms() async {
     _films.clear();
 
-    _filmController.loadFilms().then((value) {
-      setState(() {
-        _films = value;
-        _loadingFilms = false;
-      });
-    }).catchError((error) {
-      _showRequestErrorMessage(error);
-
-      setState(() {
-        _films = [];
-        _loadingFilms = false;
-      });
-    });
+    return _filmController.loadFilms();
   }
 
-  void _loadPeople() async {
-    setState(() {
-      _loadingPeople = true;
-    });
-
+  Future<List<PeopleModel>> _loadPeople() async {
     _people.clear();
 
-    _peopleController.loadFilms().then((value) {
-      setState(() {
-        _people = value;
-        _loadingPeople = false;
-      });
-    }).catchError((error) {
-      _showRequestErrorMessage(error);
-
-      setState(() {
-        _people = [];
-        _loadingPeople = false;
-      });
-    });
-  }
-
-  void _showRequestErrorMessage(var response) {
-    Fluttertoast.showToast(
-        msg: 'Falha na requisição: ${response.statusCode}',
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.CENTER
-    );
+    return _peopleController.loadPeople();
   }
 
   @override
@@ -106,9 +66,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         }
       });
     });
-
-    _loadFilms();
-    _loadPeople();
   }
 
   @override
@@ -179,12 +136,58 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          _loadingFilms == true ? Center(
-            child: CircularProgressIndicator(),
-          ) : FavoratableListView(_films, onFavorite: () {}),
-          _loadingPeople == true ? Center(
-            child: CircularProgressIndicator(),
-          ) : FavoratableListView(_people, onFavorite: () {}),
+          FutureBuilder<List<FilmModel>>(
+              future: _loadFilms(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none
+                    || snapshot.connectionState == ConnectionState.active
+                    || snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  if (snapshot.hasData) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Ocorreu um erro: ${snapshot.error}'),
+                      );
+                    } else {
+                      return FavoratableListView(snapshot.data, onFavorite: () {});
+                    }
+                  } else {
+                    return Center(
+                      child: Text('Nenhum dado foi encontrado.'),
+                    );
+                  }
+                }
+              }
+          ),
+          FutureBuilder<List<PeopleModel>>(
+              future: _loadPeople(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none
+                    || snapshot.connectionState == ConnectionState.active
+                    || snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  if (snapshot.hasData) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Ocorreu um erro: ${snapshot.error}'),
+                      );
+                    } else {
+                      return FavoratableListView(snapshot.data, onFavorite: () {});
+                    }
+                  } else {
+                    return Center(
+                      child: Text('Nenhum dado foi encontrado.'),
+                    );
+                  }
+                }
+              }
+          ),
           FavoratableListView([]),
         ],
       ),

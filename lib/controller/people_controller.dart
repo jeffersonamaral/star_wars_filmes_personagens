@@ -9,7 +9,7 @@ class PeopleController {
     this._repository = repository;
   }
 
-  Future<List<PeopleModel>> loadFilms() async {
+  Future<List<PeopleModel>> loadPeople() async {
     return _repository.findAll();
   }
 

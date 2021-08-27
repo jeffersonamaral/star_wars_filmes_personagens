@@ -5,7 +5,7 @@ import 'package:star_wars_filmes_personagens/model/abstract_model.dart';
 
 class FavoratableListView extends StatelessWidget {
 
-  List<AbstractModel> _data;
+  List<AbstractModel>? _data;
 
   GestureTapCallback? _onFavorite;
 
@@ -18,7 +18,7 @@ class FavoratableListView extends StatelessWidget {
     return ListView.builder(
         padding: EdgeInsets.all(10),
         physics: BouncingScrollPhysics(),
-        itemCount: _data.length,
+        itemCount: _data?.length,
         itemBuilder: (context, index) {
           return Container(
             margin: EdgeInsets.only(bottom: 10),
@@ -28,7 +28,7 @@ class FavoratableListView extends StatelessWidget {
             child: ListTile(
               title: Center(
                 child: Text(
-                  _data[index].label,
+                  _data![index].label,
                   style: TextStyle(
                       fontSize: 15
                   ),
