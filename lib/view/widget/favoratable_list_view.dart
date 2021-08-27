@@ -15,25 +15,29 @@ class FavoratableListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView.builder(
+        padding: EdgeInsets.all(10),
         physics: BouncingScrollPhysics(),
-        separatorBuilder: (_, index) => Divider(
-          color: Colors.black,
-        ),
         itemCount: _data.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Center(
-              child: Text(
-                _data[index].label,
-                style: TextStyle(
-                    fontSize: 15
+          return Container(
+            margin: EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black)
+            ),
+            child: ListTile(
+              title: Center(
+                child: Text(
+                  _data[index].label,
+                  style: TextStyle(
+                      fontSize: 15
+                  ),
                 ),
               ),
-            ),
-            trailing: InkWell(
-              onTap: _onFavorite,
-              child: Icon(Random().nextBool() == true ? Icons.favorite : Icons.favorite_border),
+              trailing: InkWell(
+                onTap: _onFavorite,
+                child: Icon(Icons.favorite, color: Colors.red,),
+              ),
             ),
           );
         }
