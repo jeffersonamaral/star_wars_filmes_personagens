@@ -120,14 +120,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    TargetPlatform platform = Theme.of(context).platform;
-
-    var isWeb = platform != TargetPlatform.android &&
-        platform != TargetPlatform.iOS &&
-        platform != TargetPlatform.macOS &&
-        platform != TargetPlatform.windows &&
-        platform != TargetPlatform.fuchsia;
-
     return Scaffold(
       appBar: AppBar(
           title: Text(_title),
