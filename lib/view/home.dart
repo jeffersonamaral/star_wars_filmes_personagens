@@ -1,10 +1,14 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermoji.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controller/avatar_controller.dart';
 import '../controller/favorite_controller.dart';
 import '../controller/film_controller.dart';
 import '../controller/people_controller.dart';
+import '../model/avatar_model.dart';
+import '../model/avatar_repository.dart';
 import '../model/favorite_model.dart';
 import '../model/favorite_repository.dart';
 import '../model/film_model.dart';
@@ -33,6 +37,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin, Automa
   PeopleController _peopleController = PeopleController();
 
   FavoriteController _favoriteController = FavoriteController(FavoriteRepository());
+
+  AvatarController _avatarController = AvatarController(AvatarRepository());
 
   List<FavoriteModel> _favorites = [];
 
@@ -63,6 +69,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin, Automa
     _favorites = await _favoriteController.findAll();
   }
 
+  void _loadAvatar() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    AvatarModel? loaded = await _avatarController.load();
+
+    if (loaded != null) {
+      pref.setString('fluttermoji', loaded.avatarData);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +102,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin, Automa
       });
     });
 
+    _loadAvatar();
     _loadFavorites();
   }
 

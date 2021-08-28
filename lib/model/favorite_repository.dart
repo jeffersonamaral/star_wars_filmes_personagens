@@ -1,63 +1,39 @@
-import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:star_wars_filmes_personagens/model/favorite_model.dart';
 
-import '../util/constants.dart';
+import 'abstract_repository.dart';
+import 'favorite_model.dart';
 import 'film_model.dart';
 import 'people_model.dart';
 
-class FavoriteRepository {
-
-  late Database database;
-
-  String _tableName = 'favorite';
-
-  bool _initialized = false;
+class FavoriteRepository extends AbstractRepository {
 
   FavoriteRepository();
 
-  Future<void> initialize() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    database = await openDatabase(
-      join(await getDatabasesPath(), databaseName),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE $_tableName(name TEXT PRIMARY KEY, type INTEGER NOT NULL)',
-        );
-      },
-      version: 1,
-    );
-
-    _initialized = true;
-  }
-
   void save(FavoriteModel favoriteModel) async {
-    if (!_initialized) {
+    if (!initialized) {
       await initialize();
     }
 
-    await database.insert(_tableName, favoriteModel.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
+    await database.insert(favoriteTableName, favoriteModel.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   void delete(FavoriteModel favoriteModel) async {
-    if (!_initialized) {
+    if (!initialized) {
       await initialize();
     }
 
-    await database.delete(_tableName,
+    await database.delete(favoriteTableName,
       where: 'name = ?',
       whereArgs: [favoriteModel.name],
     );
   }
 
   Future<List<FavoriteModel>> findAll() async {
-    if (!_initialized) {
+    if (!initialized) {
       await initialize();
     }
 
-    final List<Map<String, dynamic>> maps = await database.query(_tableName);
+    final List<Map<String, dynamic>> maps = await database.query(favoriteTableName);
 
     return List.generate(maps.length, (i) {
       if (maps[i]['type'] == FavoriteModel.typeFilm) {
