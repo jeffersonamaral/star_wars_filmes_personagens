@@ -14,6 +14,12 @@ class FavoratableListView extends StatefulWidget {
 
   FavoratableListView(this._data, this._favorites, { required FavoriteCallback onFavorite }) {
     this._favoriteCallback = onFavorite;
+
+    this._data?.forEach((element) {
+      if (this._favorites!.any((e) => e.name == element.name)) {
+        element.favorite = true;
+      }
+    });
   }
 
   @override
@@ -33,7 +39,7 @@ class _FavoratableListViewState extends State<FavoratableListView> {
           return Container(
             margin: EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black)
+                border: Border.all(color: Colors.black)
             ),
             child: ListTile(
               title: Center(
@@ -48,9 +54,12 @@ class _FavoratableListViewState extends State<FavoratableListView> {
                 onTap: () {
                   setState(() {
                     widget._favoriteCallback(widget._data![index]);
+                    widget._data![index].favorite = !widget._data![index].favorite;
                   });
                 },
-                child: widget._data![index].favorite == true ? Icon(Icons.favorite, color: Colors.red,) : Icon(Icons.favorite_border, color: Colors.black,),
+                child: widget._data![index].favorite == true
+                    ? Icon(Icons.favorite, color: Colors.red,)
+                    : Icon(Icons.favorite_border, color: Colors.black,),
               ),
             ),
           );
