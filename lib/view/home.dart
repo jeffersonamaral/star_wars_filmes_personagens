@@ -75,6 +75,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         }
       });
     });
+
+    _loadFavorites();
   }
 
   @override
@@ -161,6 +163,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         child: Text('Ocorreu um erro: ${snapshot.error}'),
                       );
                     } else {
+                      List<FilmModel> films = snapshot.data!;
+
+                      films.forEach((element) {
+                        if (_favorites.contains(element)) {
+                          element.favorite = true;
+                        }
+                      });
+
                       return FavoratableListView(snapshot.data, _favorites, onFavorite: (model) {
                         if (model.favorite) {
                           _favoriteController.delete(model);
@@ -193,6 +203,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         child: Text('Ocorreu um erro: ${snapshot.error}'),
                       );
                     } else {
+                      List<PeopleModel> films = snapshot.data!;
+
+                      films.forEach((element) {
+                        if (_favorites.contains(element)) {
+                          element.favorite = true;
+                        }
+                      });
+
                       return FavoratableListView(snapshot.data, _favorites, onFavorite: (model) {
                         if (model.favorite) {
                           _favoriteController.delete(model);

@@ -13,15 +13,11 @@ class FavoriteRepository {
 
   String _tableName = 'favorite';
 
-  factory FavoriteRepository() {
-    return FavoriteRepository._internal();
-  }
+  bool _initialized = false;
 
-  FavoriteRepository._internal() {
-    initialize();
-  }
+  FavoriteRepository();
 
-  void initialize() async {
+  Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     database = await openDatabase(
@@ -33,6 +29,8 @@ class FavoriteRepository {
       },
       version: 1,
     );
+
+    _initialized = true;
   }
 
   void save(FavoriteModel favoriteModel) async {
@@ -47,6 +45,10 @@ class FavoriteRepository {
   }
 
   Future<List<FavoriteModel>> findAll() async {
+    if (!_initialized) {
+      await initialize();
+    }
+
     final List<Map<String, dynamic>> maps = await database.query(_tableName);
 
     return List.generate(maps.length, (i) {
