@@ -1,16 +1,17 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
-import 'package:star_wars_filmes_personagens/controller/favorite_controller.dart';
-import 'package:star_wars_filmes_personagens/controller/film_controller.dart';
-import 'package:star_wars_filmes_personagens/controller/people_controller.dart';
-import 'package:star_wars_filmes_personagens/model/favorite_model.dart';
-import 'package:star_wars_filmes_personagens/model/favorite_repository.dart';
-import 'package:star_wars_filmes_personagens/model/film_model.dart';
-import 'package:star_wars_filmes_personagens/model/people_model.dart';
-import 'package:star_wars_filmes_personagens/util/route_generator.dart';
-import 'package:star_wars_filmes_personagens/view/widget/favoratable_list_view.dart';
-import 'package:star_wars_filmes_personagens/view/widget/favoraties_list_view.dart';
+import 'package:fluttermoji/fluttermoji.dart';
+
+import '../controller/favorite_controller.dart';
+import '../controller/film_controller.dart';
+import '../controller/people_controller.dart';
+import '../model/favorite_model.dart';
+import '../model/favorite_repository.dart';
+import '../model/film_model.dart';
+import '../model/people_model.dart';
+import '../util/route_generator.dart';
+import 'widget/favoratable_list_view.dart';
+import 'widget/favoraties_list_view.dart';
 
 class Home extends StatefulWidget {
   @override
