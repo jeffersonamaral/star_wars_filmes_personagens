@@ -1,4 +1,4 @@
-
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
 import 'package:star_wars_filmes_personagens/controller/favorite_controller.dart';
@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
 
   late TabController _tabController;
 
@@ -35,16 +35,25 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   List<FavoriteModel> _favorites = [];
 
-  Future<List<FilmModel>> _loadFilms() async {
-    _films.clear();
+  final AsyncMemoizer _memoizerFilm = AsyncMemoizer();
 
-    return _filmController.loadFilms();
+  final AsyncMemoizer _memoizerPeople = AsyncMemoizer();
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Future<dynamic> _loadFilms() async {
+    return _memoizerFilm.runOnce(() {
+      return _filmController.loadFilms();
+    });
   }
 
-  Future<List<PeopleModel>> _loadPeople() async {
-    _people.clear();
+  Future<dynamic> _loadPeople() async {
+    _films.clear();
 
-    return _peopleController.loadPeople();
+    return _memoizerPeople.runOnce(() {
+      return _peopleController.loadPeople();
+    });
   }
 
   void _loadFavorites() async {
@@ -88,6 +97,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: AppBar(
           title: Text(_title),
@@ -147,7 +158,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          FutureBuilder<List<FilmModel>>(
+          FutureBuilder<dynamic>(
               future: _loadFilms(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.none
@@ -187,7 +198,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 }
               }
           ),
-          FutureBuilder<List<PeopleModel>>(
+          FutureBuilder<dynamic>(
               future: _loadPeople(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.none
