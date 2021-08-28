@@ -1,8 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jeffersonamaral.star_wars_filmes_personagens">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
         android:label="Star Wars: Filmes e Personagens"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"
