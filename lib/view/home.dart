@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controller/avatar_config_controller.dart';
 import '../controller/avatar_controller.dart';
 import '../controller/favorite_controller.dart';
 import '../controller/film_controller.dart';
 import '../controller/people_controller.dart';
+import '../model/avatar_config_model.dart';
+import '../model/avatar_config_repository.dart';
 import '../model/avatar_model.dart';
 import '../model/avatar_repository.dart';
 import '../model/favorite_model.dart';
@@ -40,6 +43,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin, Automa
 
   AvatarController _avatarController = AvatarController(AvatarRepository());
 
+  AvatarConfigController _avatarConfigController = AvatarConfigController(AvatarConfigRepository());
+
   List<FavoriteModel> _favorites = [];
 
   final AsyncMemoizer _memoizerFilm = AsyncMemoizer();
@@ -72,10 +77,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin, Automa
   void _loadAvatar() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
-    AvatarModel? loaded = await _avatarController.load();
+    AvatarModel? loadedAvatar = await _avatarController.load();
 
-    if (loaded != null) {
-      pref.setString('fluttermoji', loaded.avatarData);
+    if (loadedAvatar != null) {
+      pref.setString('fluttermoji', loadedAvatar.avatarData);
+    }
+
+    AvatarConfigModel? loadedConfig = await _avatarConfigController.load();
+
+    if (loadedConfig != null) {
+      await pref.setString('fluttermojiSelectedOptions', loadedConfig.avatarConfigData);
     }
   }
 

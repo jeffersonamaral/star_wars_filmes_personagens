@@ -16,6 +16,9 @@ abstract class AbstractRepository {
   String avatarTableName = 'avatar';
 
   @protected
+  String avatarConfigTableName = 'avatar_config';
+
+  @protected
   bool initialized = false;
 
   Future<void> initialize() async {
@@ -25,10 +28,13 @@ abstract class AbstractRepository {
       join(await getDatabasesPath(), databaseName),
       onCreate: (db, version) {
         db.execute(
-          'CREATE TABLE $favoriteTableName(name TEXT PRIMARY KEY, type INTEGER NOT NULL); CREATE TABLE $avatarTableName(avatar_data TEXT)',
+          'CREATE TABLE $favoriteTableName(name TEXT PRIMARY KEY, type INTEGER NOT NULL)',
         );
         db.execute(
           'CREATE TABLE $avatarTableName(avatar_data TEXT)',
+        );
+        db.execute(
+          'CREATE TABLE $avatarConfigTableName(avatar_config_data TEXT PRIMARY KEY)',
         );
       },
       version: 1,

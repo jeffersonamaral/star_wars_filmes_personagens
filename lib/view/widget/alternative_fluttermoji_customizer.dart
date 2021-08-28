@@ -1,15 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttermoji/fluttermoji.dart';
 import 'package:fluttermoji/fluttermoji_assets/fluttermojimodel.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:star_wars_filmes_personagens/controller/avatar_config_controller.dart';
 import 'package:star_wars_filmes_personagens/controller/avatar_controller.dart';
+import 'package:star_wars_filmes_personagens/model/avatar_config_model.dart';
+import 'package:star_wars_filmes_personagens/model/avatar_config_repository.dart';
 import 'package:star_wars_filmes_personagens/model/avatar_model.dart';
 import 'package:star_wars_filmes_personagens/model/avatar_repository.dart';
-
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 /// This widget provides a UI for customizing the Fluttermoji
 ///
@@ -40,6 +43,7 @@ class _AlternativeFluttermojiCustomizerState extends State<AlternativeFluttermoj
     with SingleTickerProviderStateMixin {
 
   AvatarController _avatarController = AvatarController(AvatarRepository());
+  AvatarConfigController _avatarConfigController = AvatarConfigController(AvatarConfigRepository());
 
   late FluttermojiController fluttermojiController;
   late TabController tabController;
@@ -296,6 +300,7 @@ class _AlternativeFluttermojiCustomizerState extends State<AlternativeFluttermoj
                     // salvando emoji em banco de dados local
                     SharedPreferences pref = await SharedPreferences.getInstance();
                     _avatarController.save(AvatarModel(pref.getString('fluttermoji')!));
+                    _avatarConfigController.save(AvatarConfigModel(jsonEncode(fluttermojiController.selectedIndexes)));
 
                     setState(() {});
                   },

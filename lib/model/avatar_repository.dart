@@ -5,8 +5,6 @@ import 'abstract_repository.dart';
 
 class AvatarRepository extends AbstractRepository {
 
-  AvatarRepository();
-
   void save(AvatarModel avatarModel) async {
     if (!initialized) {
       await initialize();
