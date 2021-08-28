@@ -34,10 +34,18 @@ class FavoriteRepository {
   }
 
   void save(FavoriteModel favoriteModel) async {
+    if (!_initialized) {
+      await initialize();
+    }
+
     await database.insert(_tableName, favoriteModel.toMap(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   void delete(FavoriteModel favoriteModel) async {
+    if (!_initialized) {
+      await initialize();
+    }
+
     await database.delete(_tableName,
       where: 'name = ?',
       whereArgs: [favoriteModel.name],
