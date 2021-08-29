@@ -1,6 +1,6 @@
 # 
 
-# Star Wars: Filmes Personagens
+# Star Wars: Filmes e Personagens
 
 Aplicativo de listagem de filmes e personagens de Star Wars.
 
