@@ -21,4 +21,4 @@ Alternativamente é possível iniciar a execução usando o comando ```flutter r
 
 ## Release
 
-O release em forma de pacote APK pode ser encontrada no link: https://github.com/jeffersonamaral/star_wars_filmes_personagens/releases/tag/dist
+O release do aplicativo em forma de pacote APK pode ser encontrada no link: https://github.com/jeffersonamaral/star_wars_filmes_personagens/releases/tag/dist
