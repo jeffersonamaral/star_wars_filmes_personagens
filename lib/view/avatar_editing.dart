@@ -2,14 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fluttermoji/fluttermojiCircleAvatar.dart';
-
-import 'widget/alternative_fluttermoji_customizer.dart';
+import 'package:fluttermoji/fluttermojiCustomizer.dart';
 
 class AvatarEditing extends StatefulWidget {
 
-  AvatarEditing() {
-
-  }
+  AvatarEditing();
 
   @override
   _AvatarEditingState createState() => _AvatarEditingState();
@@ -65,9 +62,7 @@ class _AvatarEditingState extends State<AvatarEditing> {
                   backgroundColor: Colors.grey[200],
                   radius: min(MediaQuery.of(context).size.height * .1 , 100),
                 ),
-                AlternativeFluttermojiCustomizer(
-                  outerTitleText: 'Editar:',
-                )
+                FluttermojiCustomizer()
               ],
             )
         )
