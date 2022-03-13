@@ -2,7 +2,7 @@
 
 # Star Wars: Filmes e Personagens
 
-Aplicativo de listagem de filmes e personagens de Star Wars.
+Aplicativo de listagem de filmes e personagens de Star Wars feito utilizando a Linguagem Dart/Flutter.
 
 ## Requisitos
 
