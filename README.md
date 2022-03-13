@@ -2,7 +2,13 @@
 
 # Star Wars: Filmes e Personagens
 
-Aplicativo de listagem de filmes e personagens de Star Wars feito utilizando a Linguagem Dart/Flutter.
+Aplicativo de listagem de filmes e personagens de Star Wars feito utilizando a Linguagem Dart/Flutter consumindo API REST.
+
+<div align="center">
+<img src="https://github.com/jeffersonamaral/star_wars_filmes_personagens/blob/master/doc/screens/star_wars_filmes_personagens_screen_01.png" width="30%" border="10px"/>
+<img src="https://github.com/jeffersonamaral/star_wars_filmes_personagens/blob/master/doc/screens/star_wars_filmes_personagens_screen_02.png" width="30%" border="10px"/>
+<img src="https://github.com/jeffersonamaral/star_wars_filmes_personagens/blob/master/doc/screens/star_wars_filmes_personagens_screen_03.png" width="30%" border="10px"/>
+</div>
 
 ## Requisitos
 
